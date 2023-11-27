@@ -18,117 +18,119 @@ const dbName = "MultiplicaT";
 
 
 app.listen(port, () => {
-    console.log(`Servidor iniciado en http://localhost:${port}`);
+    console.log(`Server started on ${port}`);
 });
 
+// async function getLastId() {
+//     try {
+//         await client.connect();
+//         const db = client.db(dbName);
 
-async function obtenerUltimaID() {
-    try {
-        await client.connect();
-        const db = client.db(dbName);
+//         // Ordenar por fecha de inserción descendente y limitar a 1 documento
+//         const ultimoUsuario = await db.collection('Users').find().sort({ _id: -1 }).limit(1).toArray();
 
-        // Ordenar por fecha de inserción descendente y limitar a 1 documento
-        const ultimoUsuario = await db.collection('Users').find().sort({ _id: -1 }).limit(1).toArray();
-
-        if (ultimoUsuario.length > 0) {
-            return ultimoUsuario[0]._id.toString();
-        } else {
-            return null;
-        }
-    } finally {
-        await client.close();
-    }
-}
-
-
-app.post('/insertUsuario', async (req, res) => {
-    try {
-        // Connect to the Atlas cluster
-        await client.connect();
-        const db = client.db(dbName);
-
-        // Reference the "people" collection in the specified database
-        const col = db.collection("Users");
-
-        // Create a new document                                                                                                                                           
-        let personDocument = {
-            "nombre": "juan",
-            "correo": "juan@email.com",
-            "contrasena": "juan",
-            "rol": "juan"
-        }
+//         if (ultimoUsuario.length > 0) {
+//             return ultimoUsuario[0]._id.toString();
+//         } else {
+//             return null;
+//         }
+//     } finally {
+//         await client.close();
+//     }
+// }
 
 
+// app.post('/addUser', async (req, res) => {
+//     const user = req.body;
+//     try {
+//         // Connect to the Atlas cluster
+//         await client.connect();
+//         const db = client.db(dbName);
 
-        // Insert the document into the specified collection        
-        //const p = await col.insertOne(personDocument);
-        const idInsertada = "p.insertedId";
-        // Find and return the document
-        const usuarios = await db.collection('Users').find().toArray();
+//         // Reference the "people" collection in the specified database
+//         const col = db.collection("Users");
+
+//         // Create a new document                                                                                                                                           
+//         let personDocument = {
+//             "name": user.name,
+//             "mail": user.mail,
+//             "password": user.password,
+//             "role": user.role
+//         }
 
 
-        res.status(201).json({ id: idInsertada, mensaje: 'Usuario añadido correctamente' });
-        console.log();
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al añadir usuario');
-    } finally {
-        await client.close();
-    }
-})
 
-app.delete('/usuarios/:id', async (req, res) => {
-    try {
-        await client.connect();
-        const db = client.db(dbName);
+//         // Insert the document into the specified collection        
+//         const p = await col.insertOne(personDocument);
+//         const idInsertada = "p.insertedId";
+//         // Find and return the document
+//         const usuarios = await db.collection('Users').find().toArray();
 
-        const usuarioId = req.params.id;
+
+//         res.status(201).json({ id: idInsertada, mensaje: 'User added succesfully' });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Error adding user.');
+//     } finally {
+//         await client.close();
+//     }
+// })
+
+// app.delete('/users/:id', async (req, res) => {
+//     try {
+//         await client.connect();
+//         const db = client.db(dbName);
+
+//         const usuarioId = req.params.id;
         
-        const resultado = await db.collection('Users').deleteOne({ _id: new ObjectId(usuarioId) });
+//         const resultado = await db.collection('Users').deleteOne({ _id: new ObjectId(usuarioId) });
 
-        if (resultado.deletedCount === 1) {
-            res.send('Usuario eliminado correctamente');
-        } else {
-            res.status(404).send('Usuario no encontrado');
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al eliminar usuario');
-    } finally {
-        await client.close();
-    }
+//         if (resultado.deletedCount === 1) {
+//             res.send('User deleted succesfully.');
+//         } else {
+//             res.status(404).send('Usuario no encontrado');
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Error al eliminar usuario');
+//     } finally {
+//         await client.close();
+//     }
+// });
+
+// app.put('/usuarios/:id', async (req, res) => {
+//     try {
+//       await client.connect();
+//       const db = client.db(dbName);
+  
+//       const usuarioId = req.params.id;
+  
+//       const filtro = { _id: new ObjectId(usuarioId) };
+//       const actualizaciones = {
+//         $set: {
+//           nombre: req.body.nombre,
+//           correo: req.body.correo,
+//           contrasena: req.body.contrasena,
+//           rol: req.body.rol,
+//         },
+//       };
+  
+//       const resultado = await db.collection('Users').updateOne(filtro, actualizaciones);
+  
+//       if (resultado.modifiedCount === 1) {
+//         res.send('Usuario actualizado correctamente');
+//       } else {
+//         res.status(404).send('Usuario no encontrado');
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).send('Error al actualizar usuario');
+//     } finally {
+//       await client.close();
+//     }
+//   });
+
+app.post('/authorizationLogin', (req, res) =>{
+    
 });
-
-app.put('/usuarios/:id', async (req, res) => {
-    try {
-      await client.connect();
-      const db = client.db(dbName);
-  
-      const usuarioId = req.params.id;
-  
-      const filtro = { _id: new ObjectId(usuarioId) };
-      const actualizaciones = {
-        $set: {
-          nombre: req.body.nombre,
-          correo: req.body.correo,
-          contrasena: req.body.contrasena,
-          rol: req.body.rol,
-        },
-      };
-  
-      const resultado = await db.collection('Users').updateOne(filtro, actualizaciones);
-  
-      if (resultado.modifiedCount === 1) {
-        res.send('Usuario actualizado correctamente');
-      } else {
-        res.status(404).send('Usuario no encontrado');
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Error al actualizar usuario');
-    } finally {
-      await client.close();
-    }
-  });
-  
 
