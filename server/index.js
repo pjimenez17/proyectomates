@@ -1,13 +1,19 @@
 const { MongoClient, ObjectId } = require("mongodb");
 const express = require('express');
-import { conectarBD, cerrarConexion } from "./db";
+const session = require('express-session');
+import { conectarBD, cerrarConexion, checkIfUserExists } from "./db";
 const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3777;
 
 app.use(bodyParser.json());
-
+app.use(session({
+    secret: "miSecreto",
+    resave: false,
+    saveUninitialized: true,
+})
+);
 const url = "mongodb+srv://a22jhepincre:6tDomkVOunkWy4ZR@a22jhepincre.dsvvls4.mongodb.net/"
 const client = new MongoClient(url);
 
@@ -78,7 +84,7 @@ app.listen(port, () => {
 //         const db = client.db(dbName);
 
 //         const usuarioId = req.params.id;
-        
+
 //         const resultado = await db.collection('Users').deleteOne({ _id: new ObjectId(usuarioId) });
 
 //         if (resultado.deletedCount === 1) {
@@ -98,9 +104,9 @@ app.listen(port, () => {
 //     try {
 //       await client.connect();
 //       const db = client.db(dbName);
-  
+
 //       const usuarioId = req.params.id;
-  
+
 //       const filtro = { _id: new ObjectId(usuarioId) };
 //       const actualizaciones = {
 //         $set: {
@@ -110,9 +116,9 @@ app.listen(port, () => {
 //           rol: req.body.rol,
 //         },
 //       };
-  
+
 //       const resultado = await db.collection('Users').updateOne(filtro, actualizaciones);
-  
+
 //       if (resultado.modifiedCount === 1) {
 //         res.send('Usuario actualizado correctamente');
 //       } else {
@@ -126,7 +132,14 @@ app.listen(port, () => {
 //     }
 //   });
 
-app.post('/authorizationLogin', (req, res) =>{
-
+app.post('/authorizationLogin', async(req, res) => {
+    const user = req.body;
+    if (await checkIfUserExists(user.mail, user.password)) {
+        req.session.loogedIn = true;
+        req.session.userId = await getIdUser(user.mail, user.password);
+        res.send({ authorization: true })
+    }else{
+        res.send({ authorization: false })
+    }
 });
 
