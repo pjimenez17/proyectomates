@@ -1,5 +1,5 @@
 export async function log(username, password) {
-  const response = await fetch('http://localhost:3777/authorizationLogin', {
+  const response = await fetch('http://localhost:3777/authorizationLogin/', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
