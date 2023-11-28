@@ -28,6 +28,21 @@ export function cerrarConexion() {
     })
 }
 
+export function selectUsers(){
+    return new Promise((resolve, reject) => {
+        let con = conectDB();
+        var sql = `SELECT * FROM Users;`
+        con.query(sql, function (err, result) {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result);
+            }
+        })
+        disconnectDB(con);
+    })
+}
+
 export function insertUser(name, mail, password, role, points){
     return new Promise((resolve, reject) => {
         let con = conectDB();
@@ -41,6 +56,21 @@ export function insertUser(name, mail, password, role, points){
         });
         disconnectDB(con);
     });
+}
+
+export function getUserById(user_id){
+    return new Promise((resolve, reject) => {
+        let con = conectDB();
+        var sql = `SELECT name FROM Users WHERE user_id=${user_id};`
+        con.query(sql, function (err, result) {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result);
+            }
+        })
+        disconnectDB(con);
+    })
 }
 
 export function updateUser(user_id, name, mail, password, role){

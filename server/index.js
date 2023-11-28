@@ -1,7 +1,7 @@
 const { MongoClient, ObjectId } = require("mongodb");
 const express = require('express');
 const session = require('express-session');
-import { conectarBD, cerrarConexion, checkIfUserExists } from "./db";
+import { conectarBD, cerrarConexion, checkIfUserExists, selectUsers, insertUser, getIdUser } from "./db";
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -137,9 +137,25 @@ app.post('/authorizationLogin', async(req, res) => {
     if (await checkIfUserExists(user.mail, user.password)) {
         req.session.loogedIn = true;
         req.session.userId = await getIdUser(user.mail, user.password);
-        res.send({ authorization: true })
+        const infoUser = await getUserById(await getIdUser(user.mail, user.password));
+        res.send({ authorization: true, name: infoUser.name })
     }else{
         res.send({ authorization: false })
     }
 });
 
+app.get('/users', (req,res)=>{
+    selectUsers()
+    .then(data =>{
+        res.send(data);
+    });
+});
+
+app.post('/user', async(req,res) =>{
+    const user = req.body;
+    await insertUser(user.name, user.mail, user.password, user.role, user.points);
+})
+
+app.post('/userUpdate', (req,res)=>{
+    
+})
