@@ -143,6 +143,7 @@ app.listen(port, () => {
 //     }
 //   });
 
+//The function goes
 app.post('/authorizationLogin', async(req, res) => {
     const user = req.body;
     if (await checkIfUserExists(user.mail, user.password)) {
@@ -157,6 +158,7 @@ app.post('/authorizationLogin', async(req, res) => {
     }
 });
 
+//The function goes
 app.get('/users', (req,res)=>{
     selectUsers()
     .then(data =>{
@@ -164,6 +166,7 @@ app.get('/users', (req,res)=>{
     });
 });
 
+//The function goes
 app.post('/Insertuser', async(req,res) =>{
     const user = req.body;
     await insertUser(user.name, user.mail, user.password, user.role, user.points);
@@ -172,12 +175,13 @@ app.post('/Insertuser', async(req,res) =>{
 
 app.post('/userUpdate', async (req,res)=>{
     const user = req.body;
-    await updateUser(user.user_id,user.name,user.mail,user.user.password,user.role)
+    await updateUser(user.user_id,user.name,user.mail,user.password,user.role)
     .then(data =>{
         res.send(data);
     });
 });
 
+//The function goes
 app.delete('/deleteUser',async (req,res)=>{
     const user = req.body;
     const result = await deleteUser(user.user_id);

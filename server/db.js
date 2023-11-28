@@ -1,5 +1,6 @@
 var mysql = require('mysql2');
 const fs = require('fs');
+const { rejects } = require('assert');
 const date = new Date();
 
 module.exports = {
@@ -85,6 +86,20 @@ function getUserById(user_id){
     })
 }
 
+function getUserByIdAll(user_id){
+    return new Promise((resolve,reject)=>{
+        let con = conectDB();
+        var sql = `SELECT * FROM users WHERE user_id=${user_id};`
+        con.query(sql,function(err,results){
+            if(err){
+                reject(err);
+            }else{
+                resolve(results);
+            }
+        })
+    })
+}
+
 function updateUser(user_id, name, mail, password, role){
     return new Promise((resolve, reject) => {
         let con = conectDB();
@@ -93,7 +108,8 @@ function updateUser(user_id, name, mail, password, role){
             if (err) {
                 reject(err);
             } else {
-                resolve(result);
+                const select = getUserByIdAll(user_id)
+                resolve(select);
             }
         });
         disconnectDB(con);
