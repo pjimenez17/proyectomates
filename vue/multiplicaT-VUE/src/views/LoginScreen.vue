@@ -19,6 +19,7 @@
   
 <script>
 import { useAppStore } from '@/store/app';
+import { log } from '@/services/communicationsmanager';
 
 export default {
   data() {
@@ -28,65 +29,31 @@ export default {
     };
   },
   methods: {
-    login() {
+    async login() {
       const store = useAppStore();
 
       if (this.username.trim() !== "" && this.password.trim() !== "") {
 
-        store.setLoginInfo({
-          loggedIn: true,
-          username: this.username,
-        })
-        this.$router.push("/welcome");
-      }else{
-        window.alert("Por favor inicia sesión 😡")
-      }
-    },
-  },
-};
-</script>
-  
-<template>
-  <v-container fluid>
-    <v-row justify="center">
-      <v-col cols="12" md="8">
-        <v-card>
-          <v-card-title class="text-h5 text-center">Iniciar sesión</v-card-title>
-          <v-card-text>
-            <v-form @submit.prevent="login">
-              <v-text-field v-model="username" label="Usuario" required></v-text-field>
-              <v-text-field v-model="password" label="Contraseña" type="password" required></v-text-field>
-              <v-btn type="submit" color="primary">Iniciar sesión</v-btn>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
-</template>
-  
-<script>
-import { useAppStore } from '@/store/app';
+        try {
+          const response = await log(this.username, this.password)
 
-export default {
-  data() {
-    return {
-      username: '',
-      password: '',
-    };
-  },
-  methods: {
-    login() {
-      const store = useAppStore();
+          if (response.authorization) {
+            store.setLoginInfo({
+              loggedIn: true,
+              username: response.name
+            });
 
-      if (this.username.trim() !== "" && this.password.trim() !== "") {
-
-        store.setLoginInfo({
-          loggedIn: true,
-          username: this.username,
-        })
-        this.$router.push("/welcome");
-      }else{
+            console.log(this.username);
+            // Redirige a la página de bienvenida
+            this.$router.push("/welcome");
+          }else{
+            window.alert("Credenciales incorrectas 😡")
+          }
+        } catch(error) {
+          console.error("Error en la solicitud de inicio de sesión:", error);
+          window.alert("Error en la solicitud de inicio de sesión. Por favor, inténtalo de nuevo.");
+         }
+      } else {
         window.alert("Por favor inicia sesión 😡")
       }
     },
