@@ -2,8 +2,6 @@ var mysql = require('mysql2');
 const fs = require('fs');
 const date = new Date();
 
-exports()
-
 var dbConfig ={
     host: "dam.inspedralbes.cat",
     user: "a22pabjimpri_usuario",
