@@ -8,7 +8,8 @@ const {
     insertUser,
     getIdUser,
     updateUser,
-    getUserById
+    getUserById,
+    deleteUser
   } = require("./db");
 const bodyParser = require('body-parser');
 
@@ -161,16 +162,26 @@ app.get('/users', (req,res)=>{
     });
 });
 
-app.post('/user', async(req,res) =>{
+app.post('/Insertuser', async(req,res) =>{
     const user = req.body;
     await insertUser(user.name, user.mail, user.password, user.role, user.points);
-})
+    res.send({response: "User inserted correctly"})
+});
 
-app.post('/userUpdate', (req,res)=>{
+app.post('/userUpdate', async (req,res)=>{
     const user = req.body;
-    const id = getIdUser();
-    updateUser(user.user_id,user.name,user.mail,user.user.password,user.role)
+    await updateUser(user.user_id,user.name,user.mail,user.user.password,user.role)
     .then(data =>{
         res.send(data);
     });
+});
+
+app.delete('/deleteUser',async (req,res)=>{
+    const user = req.body;
+    const result = await deleteUser(user.user_id);
+    if(result){
+        res.send({message: "Successfully deleted user"})
+    }else{
+        res.send({message: "User not found or could not be deleted"});
+    }
 });
