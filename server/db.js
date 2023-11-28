@@ -2,7 +2,16 @@ var mysql = require('mysql2');
 const fs = require('fs');
 const date = new Date();
 
-exports()
+module.exports = {
+    checkIfUserExists,
+    selectUsers,
+    insertUser,
+    getIdUser,
+    updateUser,
+    getUserById,
+    deleteUser
+  };
+
 
 var dbConfig ={
     host: "dam.inspedralbes.cat",
