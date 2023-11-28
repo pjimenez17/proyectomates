@@ -173,6 +173,7 @@ app.post('/Insertuser', async(req,res) =>{
     res.send({response: "User inserted correctly"})
 });
 
+//The function goes
 app.post('/userUpdate', async (req,res)=>{
     const user = req.body;
     await updateUser(user.user_id,user.name,user.mail,user.password,user.role)
