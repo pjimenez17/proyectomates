@@ -1,7 +1,13 @@
 const { MongoClient, ObjectId } = require("mongodb");
 const express = require('express');
 const session = require('express-session');
-import { conectarBD, cerrarConexion, checkIfUserExists, selectUsers, insertUser, getIdUser } from "./db";
+const {
+    checkIfUserExists,
+    selectUsers,
+    insertUser,
+    getIdUser,
+    updateUser
+  } = require("./db");
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -155,7 +161,8 @@ app.post('/user', async(req,res) =>{
     const user = req.body;
     await insertUser(user.name, user.mail, user.password, user.role, user.points);
 })
-
+/*
 app.post('/userUpdate', (req,res)=>{
-    
-})
+    const user = req.body;
+    await updateUser(user.id,user.mail,user. )
+})*/
