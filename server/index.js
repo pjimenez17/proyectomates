@@ -1,17 +1,20 @@
 const { MongoClient, ObjectId } = require("mongodb");
 const express = require('express');
 const session = require('express-session');
+const cors = require('cors');
 const {
     checkIfUserExists,
     selectUsers,
     insertUser,
     getIdUser,
-    updateUser
+    updateUser,
+    getUserById
   } = require("./db");
 const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3777;
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(session({
@@ -20,6 +23,7 @@ app.use(session({
     saveUninitialized: true,
 })
 );
+
 const url = "mongodb+srv://a22jhepincre:6tDomkVOunkWy4ZR@a22jhepincre.dsvvls4.mongodb.net/"
 const client = new MongoClient(url);
 
@@ -161,8 +165,12 @@ app.post('/user', async(req,res) =>{
     const user = req.body;
     await insertUser(user.name, user.mail, user.password, user.role, user.points);
 })
-/*
+
 app.post('/userUpdate', (req,res)=>{
     const user = req.body;
-    await updateUser(user.id,user.mail,user. )
-})*/
+    const id = getIdUser();
+    updateUser(user.user_id,user.name,user.mail,user.user.password,user.role)
+    .then(data =>{
+        res.send(data);
+    });
+});
