@@ -119,7 +119,7 @@ function deleteUser(user_id){
 function checkIfUserExists(mail, password){
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = `SELECT * FROM users WHERE mail='${mail}' and password='${password}';`;
+        var sql = "SELECT * FROM users WHERE mail='"+mail+"' and password='"+password+"';";
 
         con.query(sql, function (err, result) {
             if (err) {
@@ -135,7 +135,7 @@ function checkIfUserExists(mail, password){
 function getIdUser(mail, password){
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = `SELECT user_id FROM users WHERE mail=${mail} and password=${password};`;
+        var sql = "SELECT user_id FROM users WHERE mail='"+mail+"' and password='"+password+"';";
 
         con.query(sql, function (err, result) {
             if (err) {

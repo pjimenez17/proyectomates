@@ -148,7 +148,9 @@ app.post('/authorizationLogin', async(req, res) => {
     if (await checkIfUserExists(user.mail, user.password)) {
         req.session.loogedIn = true;
         req.session.userId = await getIdUser(user.mail, user.password);
-        const infoUser = await getUserById(await getIdUser(user.mail, user.password));
+        const id = await getIdUser(user.mail, user.password);
+        console.log(id);
+        const infoUser = await getUserById(id[0].user_id);
         res.send({ authorization: true, name: infoUser.name })
     }else{
         res.send({ authorization: false })
