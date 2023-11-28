@@ -195,7 +195,6 @@ app.post('/addQuestion', async (req, res) => {
         console.error('Error inserting question:', error);
         res.status(500).json({ error: 'Error inserting question' });
     }
-
     /* If we wanna do test in thunderClient:
     {
     "subjectId": "6057b735733b8a141457b87d"(ejemplo),
