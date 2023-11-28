@@ -132,14 +132,46 @@ app.listen(port, () => {
 //     }
 //   });
 
-app.post('/authorizationLogin', async(req, res) => {
+app.post('/authorizationLogin', async (req, res) => {
     const user = req.body;
     if (await checkIfUserExists(user.mail, user.password)) {
         req.session.loogedIn = true;
         req.session.userId = await getIdUser(user.mail, user.password);
         res.send({ authorization: true })
-    }else{
+    } else {
         res.send({ authorization: false })
+    }
+});
+
+// ---Questions into MongoDb---
+
+app.post('/addQuestion', async (req, res) => {
+    const subject = req.body.subject;
+    const question = req.body.question;
+    const answer = req.body.answer;
+    try {
+        // Connect to the Atlas cluster
+        await client.connect();
+        const db = client.db(dbName)
+        // Reference the "questions" collection in the specified database
+        const questionsCollection = db.collection('Questions');
+        // Insert a single document
+        const result = await questionsCollection.updateOne(
+            { subjects: subject },
+            {
+                $push: {
+                    questions: {
+                        questions: question,
+                        answers: answer,
+                    },
+                },
+            },
+            { upsert: true },
+        );
+        res.status(200).json({ result: result.upsertedCount > 0 });
+    } catch (error) {
+        console.error('Error inserting question:', error);
+        res.status(500).json({ error: 'Error inserting question' });
     }
 });
 
