@@ -14,8 +14,16 @@ export async function log(username, password) {
   }
   const data = await response.json();
   return { ...data, username: data.name };
-}
+};
 
-export async function user(){
-    const response = await fetch('http://localhost:3777/user')
-}
+export async function getuserbymail(mail){
+    const response = await fetch('http://localhost:3777/getuserbymail/',{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({mail}),
+    });
+    const respuesta = await response.json();
+    return respuesta;
+};

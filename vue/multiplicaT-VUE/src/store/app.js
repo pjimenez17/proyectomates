@@ -16,6 +16,9 @@ export const useAppStore = defineStore('app', {
     },
     getLoginInfo(){
       return this.loginInfo;
+    },
+    getUser(){
+      return this.loginInfo.username;
     }
   },
   persist: true
