@@ -104,7 +104,7 @@ function getUserByIdAll(user_id){
 function getUserByMailALL(mail){
     return new Promise((resolve,reject)=>{
         let con = conectDB();
-        var sql = "SELECT * FROM users WHERE mail='"+mail+"';";
+        var sql = "SELECT user_id, name, mail, role, points, profile_pic FROM users WHERE mail='"+mail+"';";
         con.query(sql,function(err,results){
             if(err){
                 reject(err);
