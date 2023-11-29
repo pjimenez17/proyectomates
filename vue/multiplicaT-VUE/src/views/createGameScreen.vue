@@ -102,7 +102,7 @@ export default {
         },
         checkMaxUsers() {
             if (this.minMaxUsersPvP > 50) {
-                this.minMaxPointsPvP = 50;
+                this.minMaxUsersPvP = 50;
             }
     },
 }}
