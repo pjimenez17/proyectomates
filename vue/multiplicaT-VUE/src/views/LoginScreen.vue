@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="login-container">
     <v-row justify="center">
-      <v-col cols="12" md="8">
+      <v-col cols="12" md="4">
         <v-card>
           <v-card-title class="text-h5 text-center">Iniciar sesión</v-card-title>
           <div class="imagen">
@@ -12,7 +12,7 @@
               <v-text-field v-model="username" prepend-inner-icon="mdi-email" label="Correo" required></v-text-field>
               <v-text-field v-model="password" prepend-inner-icon="mdi-lock-outline" label="Contraseña" type="password"
                 required></v-text-field>
-              <v-btn color="blue" size="large" type="submit" variant="elevated">Iniciar sesion</v-btn>
+              <v-btn color="blue" block  size="large" type="submit" variant="elevated" >Iniciar sesion</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
