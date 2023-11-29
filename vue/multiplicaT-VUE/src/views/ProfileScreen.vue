@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <v-switch label="Switch">
         <v-row>
             <v-col>
                 <v-card>
@@ -10,13 +11,15 @@
                         <v-row>
                             <v-col v-for="users in user">
                                 <v-subheader>Información Personal</v-subheader>
-                                <v-text-field label="Nombre">{{ users.name }} </v-text-field>
-                                <v-text-field label="Correo Electrónico">{{ users.mail }}</v-text-field>
-                                <v-text-field label="Contraseña" type="password">{{ users.password }}</v-text-field>
-                                <v-text-field label="Rol" :type="showPassword ? 'text' : 'password'"
-                                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" @click:append="SeePasword()"
-                                    type="number">{{ users.role }}</v-text-field>
-                                <v-text-field label="Puntos">{{ users.points }}</v-text-field>
+
+                                <p>NAME</p>
+                                <v-text-field prepend-inner-icon="mdi-account">{{ users.name }} </v-text-field>
+                                <p>MAIL</p>
+                                <v-text-field prepend-inner-icon="mdi-email" >{{ users.mail }}</v-text-field>
+                                <p>ROLE</p>
+                                <v-text-field prepend-inner-icon="mdi-shield" >{{ users.role }}</v-text-field>
+                                <p>POINTS</p>
+                                <v-text-field prepend-inner-icon="mdi-trophy">{{ users.points }}</v-text-field>
                             </v-col>
                         </v-row>
                     </v-card-text>
@@ -26,6 +29,7 @@
                 </v-card>
             </v-col>
         </v-row>
+    </v-switch>
     </v-container>
 </template>
   
@@ -55,8 +59,11 @@ export default {
     created() {
         console.log("CREADO");
         const store = useAppStore();
-        this.mail = store.getUsername();
-        
+        const usermail= store.getMail();
+        this.mail = usermail;
+        console.log("MAIL PERFIL: ",this.mail);
+    },
+    mounted(){
         getuserbymail(this.mail).then((response) => {
             this.user = response;
             console.log(this.user);
@@ -70,5 +77,7 @@ export default {
     font-size: 24px;
     font-weight: bold;
 }
+
+
 </style>
   
