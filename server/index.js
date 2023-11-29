@@ -119,19 +119,6 @@ app.post('/addQuestion', async (req, res) => {
         console.error('Error inserting question:', error);
         res.status(500).json({ error: 'Error inserting question' });
     }
-    /* If we wanna do test in thunderClient:
-    {
-    "subjectId": "6057b735733b8a141457b87d"(ejemplo),
-    "question": "¿Cuál es la estructura básica de un programa en JavaScript?",
-    "correctAnswer": "function main() { // código aquí }",
-    "options": [
-        "class main { // código aquí }",
-        "function main() { // código aquí }",
-        "if(typeof main === 'function') { main(); }"
-    ],
-    "difficulty": "easy",
-    "points": 10
-    }*/
 });
 
 //The function goes
