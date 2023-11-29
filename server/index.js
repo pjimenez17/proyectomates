@@ -160,9 +160,11 @@ app.delete('/deleteUser',async (req,res)=>{
 });
 
 //Requests
-app.post('/getuserbymail', async (req,res)=>{
+app.post('/getuserbymail', (req,res)=>{
     const user = req.body;
-    await getUserByMailALL(user.mail)
+    console.log("GETUSERBYMAIL::");
+    console.log(user);
+    getUserByMailALL(user.mail)
     .then((data)=>{
         res.send(data)
     });
