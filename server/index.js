@@ -163,6 +163,7 @@ app.get('/getQuestions', async (req, res) => {
 });
 
 
+// Here add a questions in function the subject
 // First add a subjects for after add a question
 app.post('/addSubject', async (req, res) => {
     const subject = req.body.subject;
@@ -213,5 +214,4 @@ app.post('/addQuestion', async (req, res) => {
         console.error('Error inserting question:', error);
         res.status(500).json({ error: 'Error inserting question' });
     }
-  
 });
