@@ -1,7 +1,7 @@
 const { MongoClient, ObjectId } = require("mongodb");
 const express = require('express');
 const session = require('express-session');
-import { conectarBD, cerrarConexion, checkIfUserExists } from "./db";
+//import { conectarBD, cerrarConexion, checkIfUserExists } from "./db";
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -145,10 +145,54 @@ app.post('/authorizationLogin', async (req, res) => {
 
 // ---Questions into MongoDb---
 
-app.post('/addQuestion', async (req, res) => {
+// We get the questions
+app.get('/getQuestions', async (req, res) => {
+    try {
+        // Connect to the Atlas cluster
+        await client.connect();
+        const db = client.db(dbName)
+        // Reference the "questions" collection in the specified database
+        const questionsCollection = db.collection('Questions');
+        // Fetch all documents in the "questions" collection
+        const result = await questionsCollection.find({}).toArray();
+        res.status(200).json({ questions: result });
+    } catch (error) {
+        console.error('Error fetching questions:', error);
+        res.status(500).json({ error: 'Error fetching questions' });
+    }
+});
+
+
+// First add a subjects for after add a question
+app.post('/addSubject', async (req, res) => {
     const subject = req.body.subject;
+    try {
+        // Connect to the Atlas cluster
+        await client.connect();
+        const db = client.db(dbName)
+        // Reference the "subjects" collection in the specified database
+        const subjectsCollection = db.collection('Subjects');
+        // Insert a single document
+        const result = await subjectsCollection.insertOne({ nombre: subject });
+        res.status(200).json({ result: result.insertedCount > 0 });
+    } catch (error) {
+        console.error('Error inserting subject:', error);
+        res.status(500).json({ error: 'Error inserting subject' });
+    }
+    /* If we wanna do test in thunderClient:
+    {
+    "subject": "Programación"
+    } */
+});
+
+// Here add a questions in function the subject
+app.post('/addQuestion', async (req, res) => {
+    const subjectId = req.body.subjectId;
     const question = req.body.question;
-    const answer = req.body.answer;
+    const correctAnswer = req.body.correctAnswer;
+    const options = req.body.options;
+    const difficulty = req.body.difficulty;
+    const points = req.body.points;
     try {
         // Connect to the Atlas cluster
         await client.connect();
@@ -156,22 +200,18 @@ app.post('/addQuestion', async (req, res) => {
         // Reference the "questions" collection in the specified database
         const questionsCollection = db.collection('Questions');
         // Insert a single document
-        const result = await questionsCollection.updateOne(
-            { subjects: subject },
-            {
-                $push: {
-                    questions: {
-                        questions: question,
-                        answers: answer,
-                    },
-                },
-            },
-            { upsert: true },
-        );
-        res.status(200).json({ result: result.upsertedCount > 0 });
+        const result = await questionsCollection.insertOne({
+            tema_id: ObjectId(subjectId),
+            enunciado: question,
+            respuesta_correcta: correctAnswer,
+            opciones: options,
+            dificultad: difficulty,
+            puntuacion: points
+        });
+        res.status(200).json({ result: result.insertedCount > 0 });
     } catch (error) {
         console.error('Error inserting question:', error);
         res.status(500).json({ error: 'Error inserting question' });
     }
+  
 });
-
