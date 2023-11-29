@@ -9,7 +9,8 @@ const {
     getIdUser,
     updateUser,
     getUserById,
-    deleteUser
+    deleteUser,
+    getUserByMailALL
   } = require("./db");
 const bodyParser = require('body-parser');
 
@@ -156,5 +157,14 @@ app.delete('/deleteUser',async (req,res)=>{
     }else{
         res.send({message: "User not found or could not be deleted"});
     }
+});
+
+//Requests
+app.post('/getuserbymail', async (req,res)=>{
+    const user = req.body;
+    await getUserByMailALL(user.mail)
+    .then((data)=>{
+        res.send(data)
+    });
 });
 

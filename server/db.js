@@ -10,7 +10,8 @@ module.exports = {
     getIdUser,
     updateUser,
     getUserById,
-    deleteUser
+    deleteUser,
+    getUserByMailALL
   };
 
 
@@ -90,6 +91,20 @@ function getUserByIdAll(user_id){
     return new Promise((resolve,reject)=>{
         let con = conectDB();
         var sql = `SELECT * FROM users WHERE user_id=${user_id};`
+        con.query(sql,function(err,results){
+            if(err){
+                reject(err);
+            }else{
+                resolve(results);
+            }
+        })
+    })
+}
+
+function getUserByMailALL(mail){
+    return new Promise((resolve,reject)=>{
+        let con = conectDB();
+        var sql = "SELECT * FROM users WHERE mail='"+mail+"';";
         con.query(sql,function(err,results){
             if(err){
                 reject(err);
