@@ -40,4 +40,16 @@ export async function fetchQuestions() {
       console.error('Error obteniendo preguntas:', error);
       // Manejar el error según sea necesario
     }
-  }
+  };
+
+export async function getuserbymail(mail){
+    const response = await fetch('http://localhost:3777/getuserbymail/',{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({mail}),
+    });
+    const respuesta = await response.json();
+    return respuesta;
+};
