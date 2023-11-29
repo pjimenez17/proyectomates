@@ -9,8 +9,8 @@
           </div>
           <v-card-text>
             <v-form @submit.prevent="login">
-              <v-text-field v-model="username" prepend-inner-icon="mdi-email" label="Correo" required></v-text-field>
-              <v-text-field v-model="password" :type="showPassword ? 'text' : 'password'"
+              <v-text-field clearable  v-model="username" prepend-inner-icon="mdi-email" label="Correo" required></v-text-field>
+              <v-text-field clearable  v-model="password" :type="showPassword ? 'text' : 'password'"
                 prepend-inner-icon="mdi-lock-outline" label="Contraseña" required
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" @click:append="SeePasword()">
               </v-text-field>
