@@ -55,7 +55,7 @@ export default {
     created() {
         console.log("CREADO");
         const store = useAppStore();
-        this.mail = store.getUser();
+        this.mail = store.getUsername();
         
         getuserbymail(this.mail).then((response) => {
             this.user = response;
