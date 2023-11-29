@@ -50,6 +50,25 @@ app.post('/authorizationLogin', async(req, res) => {
 
 // ---Questions into MongoDb---
 
+// We get the questions
+app.get('/getQuestions', async (req, res) => {
+    try {
+        // Connect to the Atlas cluster
+        await client.connect();
+        const db = client.db(dbName)
+        // Reference the "questions" collection in the specified database
+        const questionsCollection = db.collection('Questions');
+        // Fetch all documents in the "questions" collection
+        const result = await questionsCollection.find({}).toArray();
+        res.status(200).json({ questions: result });
+    } catch (error) {
+        console.error('Error fetching questions:', error);
+        res.status(500).json({ error: 'Error fetching questions' });
+    }
+});
+
+
+// Here add a questions in function the subject
 // First add a subjects for after add a question
 app.post('/addSubject', async (req, res) => {
     const subject = req.body.subject;
@@ -115,7 +134,6 @@ app.post('/addQuestion', async (req, res) => {
     }*/
 });
 
-
 //The function goes
 app.get('/users', (req,res)=>{
     selectUsers()
@@ -150,3 +168,4 @@ app.delete('/deleteUser',async (req,res)=>{
         res.send({message: "User not found or could not be deleted"});
     }
 });
+
