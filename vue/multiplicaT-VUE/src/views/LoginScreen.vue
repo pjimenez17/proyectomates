@@ -10,9 +10,12 @@
           <v-card-text>
             <v-form @submit.prevent="login">
               <v-text-field v-model="username" prepend-inner-icon="mdi-email" label="Correo" required></v-text-field>
-              <v-text-field v-model="password" prepend-inner-icon="mdi-lock-outline" label="Contraseña" type="password"
-                required></v-text-field>
-              <v-btn color="blue" block  size="large" type="submit" variant="elevated" >Iniciar sesion</v-btn>
+              <v-text-field v-model="password" :type="showPassword ? 'text' : 'password'"
+                prepend-inner-icon="mdi-lock-outline" label="Contraseña" required
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" @click:append="SeePasword()">
+              </v-text-field>
+
+              <v-btn class="boton" block size="large" type="submit" variant="elevated">Iniciar sesion</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -30,6 +33,7 @@ export default {
     return {
       username: '',
       password: '',
+      showPassword: false,
     };
   },
   methods: {
@@ -61,11 +65,15 @@ export default {
         window.alert("Por favor inicia sesión 😡")
       }
     },
+    SeePasword() {
+      // Cambia el estado de showPassword al hacer clic en el botón
+      this.showPassword = !this.showPassword;
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .login-container {
   background-image: url("@/assets/fondo.jpg");
   background-size: cover;
@@ -88,16 +96,50 @@ export default {
   border-radius: 10px;
 }
 
-.imagen{
+.imagen {
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  height: 16vh; /* Ajusta la altura según sea necesario */
+  justify-content: center;
+  /* Centra horizontalmente */
+  align-items: center;
+  /* Centra verticalmente */
+  height: 16vh;
+  /* Ajusta la altura según sea necesario */
 }
 
-.img_peq{
-  width: 200px; /* Ajusta el ancho según sea necesario */
-  height: auto; /* Se ajustará automáticamente para mantener la proporción original */
+.img_peq {
+  width: 200px;
+  /* Ajusta el ancho según sea necesario */
+  height: auto;
+  /* Se ajustará automáticamente para mantener la proporción original */
+}
+
+
+button {
+  padding: 1.3em 3em;
+  width: 100%;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #3894fc;
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+}
+
+button:hover {
+  background-color: #23c483;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+button:active {
+  transform: translateY(-1px);
 }
 </style>
   
