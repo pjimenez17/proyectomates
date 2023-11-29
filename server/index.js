@@ -143,7 +143,7 @@ app.post('/authorizationLogin', async (req, res) => {
     }
 });
 
-// ---Questions into MongoDb---
+// ---Questions from MongoDb---
 
 // We get the questions
 app.get('/getQuestions', async (req, res) => {
@@ -162,38 +162,14 @@ app.get('/getQuestions', async (req, res) => {
     }
 });
 
-
-// Here add a questions in function the subject
-// First add a subjects for after add a question
-app.post('/addSubject', async (req, res) => {
-    const subject = req.body.subject;
-    try {
-        // Connect to the Atlas cluster
-        await client.connect();
-        const db = client.db(dbName)
-        // Reference the "subjects" collection in the specified database
-        const subjectsCollection = db.collection('Subjects');
-        // Insert a single document
-        const result = await subjectsCollection.insertOne({ nombre: subject });
-        res.status(200).json({ result: result.insertedCount > 0 });
-    } catch (error) {
-        console.error('Error inserting subject:', error);
-        res.status(500).json({ error: 'Error inserting subject' });
-    }
-    /* If we wanna do test in thunderClient:
-    {
-    "subject": "Programación"
-    } */
-});
-
 // Here add a questions in function the subject
 app.post('/addQuestion', async (req, res) => {
-    const subjectId = req.body.subjectId;
-    const question = req.body.question;
-    const correctAnswer = req.body.correctAnswer;
-    const options = req.body.options;
-    const difficulty = req.body.difficulty;
-    const points = req.body.points;
+    const subject = req.body.nombre;
+    const question = []
+    req.body.preguntes.forEach(element => {
+        question.push(element)
+    });
+
     try {
         // Connect to the Atlas cluster
         await client.connect();
@@ -202,16 +178,51 @@ app.post('/addQuestion', async (req, res) => {
         const questionsCollection = db.collection('Questions');
         // Insert a single document
         const result = await questionsCollection.insertOne({
-            tema_id: ObjectId(subjectId),
-            enunciado: question,
-            respuesta_correcta: correctAnswer,
-            opciones: options,
-            dificultad: difficulty,
-            puntuacion: points
+            nombre: subject,
+            preguntes: question 
         });
-        res.status(200).json({ result: result.insertedCount > 0 });
+        res.status(200).json({ message: 'Successfully' });
     } catch (error) {
         console.error('Error inserting question:', error);
         res.status(500).json({ error: 'Error inserting question' });
     }
 });
+
+app.delete('/deleQuestion/:id', async (req, res) => {
+    const id = req.params.id; 
+
+    try {
+        await client.connect();
+        const db = client.db(dbName);
+        // Validate the input for creating a new ObjectId
+        const objectId = new ObjectId(id);
+
+        const result = await db.collection("Questions").deleteOne({ _id: objectId });
+        res.status(200).json({ message: `Successfully deleted the question with id: ${id}` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred while deleting the question' });
+    } finally {
+        await client.close();
+    }
+});
+
+app.put('/updateQuestion/:id', async (req,res) => {
+    const id = req.params.id;
+    const newData = req.body;
+    try {
+        await client.connect();
+        const db = client.db(dbName);
+        // Validate the input for creating a new ObjectId
+        const objectId = new ObjectId(id);
+
+        const result = await db.collection("Questions").updateOne({ _id: objectId }, { $set: newData });
+        res.status(200).json({ message: 'Succesfully update' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred while deleting the question' });
+    } finally {
+        await client.close();
+    }
+    
+})
