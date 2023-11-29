@@ -30,6 +30,7 @@ export default {
     return {
       username: '',
       password: '',
+      mail: '',
     };
   },
   methods: {
@@ -44,10 +45,12 @@ export default {
           if (response.authorization) {
             store.setLoginInfo({
               loggedIn: true,
-              username: response.name
+              mail: this.username,
+              username: response.name     
             });
 
-            console.log(this.username);
+            console.log("Correo electrónico: " + store.getMail());
+            console.log("Nombre de usuario: "+ store.getUsername());
             // Redirige a la página de bienvenida
             this.$router.push("/welcome");
           } else {
