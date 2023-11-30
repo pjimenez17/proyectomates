@@ -192,7 +192,7 @@ app.post("/insertGame", async(req, res) =>{
     const game = req.body;
     const result = await insertGame(game.required_points, game.max_players);
     const gameCreated = await selectLastGame();
-    res.send(gameCreated.game_id);
+    res.send(gameCreated[0].game_id);
 });
 
 //http://localhost:3777/@body(json)/21416542(exemple)
