@@ -50,7 +50,7 @@ const client = new MongoClient(url);
 
 const dbName = "MultiplicaT";
 
-server.listen(port, () => {
+Server.listen(port, () => {
     console.log(`Server started on ${port}`);
 });
 
