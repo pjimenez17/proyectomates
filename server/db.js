@@ -110,7 +110,7 @@ function getUserByIdAll(user_id) {
 function getUserByMailALL(mail) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = "SELECT user_id, name, mail, role, points, profile_pic FROM users WHERE mail='" + mail + "';";
+        var sql = "SELECT user_id, name, mail, role, points, profile_pic, game_id FROM users WHERE mail='" + mail + "';";
         con.query(sql, function (err, results) {
             if (err) {
                 reject(err);
@@ -124,7 +124,7 @@ function getUserByMailALL(mail) {
 function updateUser(user_id, name, mail, password, role, game_id, points, profile_pic) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = "UPDATE users SET name='" + name + "', mail='" + mail + "', password='" + password + "', role='" + role + "', game_id= " + game_id + ", points=" + points + ", profile_pic='" + profile_pic + "' WHERE user_id=" + user_id + ";";
+        var sql = "UPDATE users SET name='" + name + "', mail='" + mail + "', role='" + role + "', game_id= " + game_id + ", points=" + points + ", profile_pic='" + profile_pic + "' WHERE user_id=" + user_id + ";";
         con.query(sql, function (err, result) {
             if (err) {
                 reject(err);

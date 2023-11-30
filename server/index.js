@@ -197,10 +197,12 @@ app.post("/insertGame", async(req, res) =>{
 });
 
 //http://localhost:3777/@body(json)/21416542(exemple)
-app.post('/changeGameId/:id', (req,body) =>{
+app.post('/changeGameId/:id', async(req,body) =>{
     const game_id = req.params.id;
-    
-    updateUser(user_id, name, mail, password, role, game_id, points, profile_pic)
+    const data = req.body;
+
+    const user = await getUserByMailALL(data.mail);
+    updateUser(user.user_id, user.name, user.mail, user.role, game_id, user.points, user.profile_pic)
     .then(data =>{
         res.send(data);
     });
