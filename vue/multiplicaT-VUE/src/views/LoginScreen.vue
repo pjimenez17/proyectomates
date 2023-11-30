@@ -3,9 +3,9 @@
     <v-row justify="center">
       <v-col cols="12" md="4">
         <v-card>
-          <v-card-title class="text-h5 text-center">Iniciar sesión</v-card-title>
+          <!-- <v-card-title class="text-h5 text-center">Iniciar sesión</v-card-title> -->
           <div class="imagen">
-            <img class="img_peq" src="../assets/name_app.png">
+            <img style="margin-top: 40px;" class="img_peq" src="../assets/name_app.png">
           </div>
           <v-card-text>
             <v-form @submit.prevent="login">
@@ -15,7 +15,7 @@
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" @click:append="SeePasword()">
               </v-text-field>
 
-              <v-btn class="boton" block size="large" type="submit" variant="elevated">Iniciar sesion</v-btn>
+              <v-btn class="click" type="submit" variant="elevated">Iniciar sesion</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -78,7 +78,8 @@ export default {
 
 <style scoped>
 .login-container {
-  background-image: url("@/assets/fondo.jpg");
+  background-color: rgb(2, 4, 80);
+  /* background-image: url("@/assets/fondo.jpg"); */
   background-size: cover;
   background-position: center center;
   height: 100vh;
@@ -115,9 +116,31 @@ export default {
   height: auto;
   /* Se ajustará automáticamente para mantener la proporción original */
 }
+.click {
+  margin: 2rem auto;
+  display: flex;
+  background-color:#3894fc;
+  color: white;
+  cursor: pointer;
+  border: none;
+  font-size: 1.2rem;
+  padding: 10px 15px;
+  border-radius: .25rem
+}
 
+.click {
+  transition: background .8s ease-out;
+  background: #3894fc radial-gradient(circle, transparent 1%, #3894fc 1%) center/15000%;
+}
 
-button {
+.click:active {
+  background-color: #c1b4ff;
+  background-size: 100%;
+  transition: background 0s;
+}
+  
+
+/* button {
   padding: 1.3em 3em;
   width: 100%;
   font-size: 12px;
@@ -143,6 +166,6 @@ button:hover {
 
 button:active {
   transform: translateY(-1px);
-}
+} */
 </style>
   
