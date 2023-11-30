@@ -55,7 +55,11 @@ function selectUsers(){
             }
         })
         disconnectDB(con);
-    })
+    });
+}
+
+function selectUsersByPoints(){
+    
 }
 
 function insertUser(name, mail, password, role, points){

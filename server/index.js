@@ -2,6 +2,22 @@ const { MongoClient, ObjectId } = require("mongodb");
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const port = 3777;
+
+const http = require('http');
+const path = require('path');
+const { Server } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+
 const {
     checkIfUserExists,
     selectUsers,
@@ -13,13 +29,13 @@ const {
     getUserByMailALL,
     insertGame
   } = require("./db");
-const bodyParser = require('body-parser');
 
-const app = express();
-const port = 3777;
+
+
+
 app.use(cors());
-
 app.use(bodyParser.json());
+app.use(express.json());
 app.use(session({
     secret: "miSecreto",
     resave: false,
@@ -177,3 +193,16 @@ app.post("/insertGame", async(req, res) =>{
     res.send(result);
 });
 
+
+// ---------------------------------------------- SOCKET ---------------------------------------------- //
+io.on('connection', async(socket) =>{
+
+    socket.on('getUsers', async()=>{
+        var users = await selectUsers();
+        io.emit('users', users);
+    });
+
+    socket.on('disconnect', () => {
+
+    });
+});
