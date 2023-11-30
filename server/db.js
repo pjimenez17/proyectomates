@@ -1,6 +1,7 @@
 var mysql = require('mysql2');
 const fs = require('fs');
 const { rejects } = require('assert');
+const { resolve } = require('path');
 const date = new Date();
 
 module.exports = {
@@ -12,10 +13,10 @@ module.exports = {
     getUserById,
     deleteUser,
     getUserByMailALL
-  };
+};
 
 
-var dbConfig ={
+var dbConfig = {
     host: "dam.inspedralbes.cat",
     user: "a22pabjimpri_usuario",
     password: "Dam2023+++",
@@ -42,7 +43,7 @@ function disconnectDB(con) {
     })
 }
 
-function selectUsers(){
+function selectUsers() {
     return new Promise((resolve, reject) => {
         let con = conectDB();
         var sql = `SELECT * FROM users;`
@@ -57,7 +58,7 @@ function selectUsers(){
     })
 }
 
-function insertUser(name, mail, password, role, points){
+function insertUser(name, mail, password, role, points) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
         var sql = "INSERT INTO users  (name, mail, password, role, points)VALUES ('" + name + "', '" + mail + "', '" + password + "', '" + role + "', " + points + ");";
@@ -72,7 +73,7 @@ function insertUser(name, mail, password, role, points){
     });
 }
 
-function getUserById(user_id){
+function getUserById(user_id) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
         var sql = `SELECT name FROM users WHERE user_id=${user_id};`
@@ -87,38 +88,38 @@ function getUserById(user_id){
     })
 }
 
-function getUserByIdAll(user_id){
-    return new Promise((resolve,reject)=>{
-        let con = conectDB();
-        var sql = `SELECT * FROM users WHERE user_id=${user_id};`
-        con.query(sql,function(err,results){
-            if(err){
-                reject(err);
-            }else{
-                resolve(results);
-            }
-        })
-    })
-}
-
-function getUserByMailALL(mail){
-    return new Promise((resolve,reject)=>{
-        let con = conectDB();
-        var sql = "SELECT user_id, name, mail, role, points, profile_pic FROM users WHERE mail='"+mail+"';";
-        con.query(sql,function(err,results){
-            if(err){
-                reject(err);
-            }else{
-                resolve(results);
-            }
-        })
-    })
-}
-
-function updateUser(user_id, name, mail, password, role){
+function getUserByIdAll(user_id) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = "UPDATE users SET name='"+ name +"', mail='" + mail + "', password='" + password + "', role='" + role + "' WHERE user_id="+user_id+";";
+        var sql = `SELECT * FROM users WHERE user_id=${user_id};`
+        con.query(sql, function (err, results) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        })
+    })
+}
+
+function getUserByMailALL(mail) {
+    return new Promise((resolve, reject) => {
+        let con = conectDB();
+        var sql = "SELECT user_id, name, mail, role, points, profile_pic FROM users WHERE mail='" + mail + "';";
+        con.query(sql, function (err, results) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        })
+    })
+}
+
+function updateUser(user_id, name, mail, password, role) {
+    return new Promise((resolve, reject) => {
+        let con = conectDB();
+        var sql = "UPDATE users SET name='" + name + "', mail='" + mail + "', password='" + password + "', role='" + role + "' WHERE user_id=" + user_id + ";";
         con.query(sql, function (err, result) {
             if (err) {
                 reject(err);
@@ -131,7 +132,7 @@ function updateUser(user_id, name, mail, password, role){
     });
 }
 
-function deleteUser(user_id){
+function deleteUser(user_id) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
         var sql = "DELETE FROM users WHERE user_id=" + user_id;
@@ -147,10 +148,10 @@ function deleteUser(user_id){
     });
 }
 
-function checkIfUserExists(mail, password){
+function checkIfUserExists(mail, password) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = "SELECT * FROM users WHERE mail='"+mail+"' and password='"+password+"';";
+        var sql = "SELECT * FROM users WHERE mail='" + mail + "' and password='" + password + "';";
 
         con.query(sql, function (err, result) {
             if (err) {
@@ -163,10 +164,10 @@ function checkIfUserExists(mail, password){
     });
 }
 
-function getIdUser(mail, password){
+function getIdUser(mail, password) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = "SELECT user_id FROM users WHERE mail='"+mail+"' and password='"+password+"';";
+        var sql = "SELECT user_id FROM users WHERE mail='" + mail + "' and password='" + password + "';";
 
         con.query(sql, function (err, result) {
             if (err) {
@@ -177,4 +178,20 @@ function getIdUser(mail, password){
         });
         disconnectDB(con);
     });
+}
+
+function UpdateUserVue(name, mail) {
+    return new Promise((resolve, rejects) => {
+        let con = conectDB();
+        var sql = "UPDATE users SET name='"+name+"',mail='"+mail+"' WHERE mail='" + mail + "';";
+
+        con.query(sql,function(err,result){
+            if(err){
+                rejects(err)
+            }else{
+                con
+                resolve()
+            }
+        });
+    })
 }
