@@ -27,7 +27,8 @@ const {
     getUserById,
     deleteUser,
     getUserByMailALL,
-    insertGame
+    insertGame,
+    selectLastGame
   } = require("./db");
 
 
@@ -190,13 +191,18 @@ app.post('/getuserbymail', (req,res)=>{
 app.post("/insertGame", async(req, res) =>{
     const game = req.body;
     const result = await insertGame(game.required_points, game.max_players);
-    res.send(result);
+    const gameCreated = await selectLastGame();
+    res.send(gameCreated.game_id);
 });
 
+//http://localhost:3777/@body(json)/21416542(exemple)
 app.post('/changeGameId/:id', (req,body) =>{
-    const id = req.params.id;
-
-    updateUser()
+    const game_id = req.params.id;
+    
+    updateUser(user_id, name, mail, password, role, game_id, points, profile_pic)
+    .then(data =>{
+        res.send(data);
+    });
 })
 
 
