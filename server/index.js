@@ -54,9 +54,9 @@ app.listen(port, () => {
 });
 
 app.post('/authorizationLogin', async(req, res) => {
-    const user = req.body;
-    console.log(user);
-    if (await checkIfUserExists(user.mail, user.password)) {
+    try {
+        const user = req.body;
+        console.log(user);
         req.session.loogedIn = true;
         req.session.userId = await getIdUser(user.mail, user.password);
         const id = await getIdUser(user.mail, user.password);
@@ -64,7 +64,8 @@ app.post('/authorizationLogin', async(req, res) => {
         const infoUser = await getUserById(id[0].user_id);
         console.log(infoUser);
         res.send({ authorization: true, name: infoUser[0].name })
-    }else{
+    }
+    catch {
         res.send({ authorization: false })
     }
 });
