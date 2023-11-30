@@ -28,7 +28,8 @@ const {
     deleteUser,
     getUserByMailALL,
     insertGame,
-    selectLastGame
+    selectLastGame,
+    getGameData
   } = require("./db");
 
 
@@ -208,6 +209,16 @@ app.post('/changeGameId/:id', async(req, res) =>{
     });
 })
 
+app.post("/getGameData", async(req, res)=>{
+    console.log(req.body);
+    const id = req.body.game_id;
+    console.log(id);    
+    getGameData(id)
+    .then((data)=>{
+        res.json(data);
+        console.log(data);
+    })
+})
 
 // ---------------------------------------------- SOCKET ---------------------------------------------- //
 io.on('connection', async(socket) =>{

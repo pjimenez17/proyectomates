@@ -13,7 +13,8 @@ module.exports = {
     deleteUser,
     getUserByMailALL,
     insertGame,
-    selectLastGame
+    selectLastGame,
+    getGameData
 };
 
 
@@ -203,7 +204,7 @@ function getIdUser(mail, password) {
 function insertGame(required_points, max_players) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = "INSERT INTO Game  (required_points, max_players)VALUES (" + required_points + ", " + max_players + ")";
+        var sql = "INSERT INTO Game (required_points, max_players, game_password) VALUES (" + required_points + ", " + max_players + ", FLOOR(RAND() * 900000) + 100000)";
         con.query(sql, function (err, result) {
             if (err) {
                 reject(err);
@@ -213,4 +214,18 @@ function insertGame(required_points, max_players) {
         });
         disconnectDB(con);
     });
+}
+
+function getGameData(game_id){
+    return new Promise((resolve, reject) => {
+        let con = conectDB();
+        var sql = "SELECT * FROM Game WHERE game_id = '"+ game_id+"';";
+        con.query(sql, function (err, result){
+            if(err){
+                reject(err)
+            }else{
+                resolve(result)
+            }
+        })
+    })
 }
