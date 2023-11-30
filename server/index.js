@@ -189,9 +189,15 @@ app.post('/getuserbymail', (req,res)=>{
 
 app.post("/insertGame", async(req, res) =>{
     const game = req.body;
-    const result = await insertGame(game.require_points, game.max_players);
+    const result = await insertGame(game.required_points, game.max_players);
     res.send(result);
 });
+
+app.post('/changeGameId/:id', (req,body) =>{
+    const id = req.params.id;
+
+    updateUser()
+})
 
 
 // ---------------------------------------------- SOCKET ---------------------------------------------- //
