@@ -6,6 +6,10 @@ export const useAppStore = defineStore('app', {
       username: '',
       mail: '',
     },
+    gameInfo: {
+      game_id: '',
+      password: '',
+    },
     infoRanking:{
       ranking:[]
     },
@@ -18,6 +22,16 @@ export const useAppStore = defineStore('app', {
       this.loginInfo.loggedIn = loggedIn;
       this.loginInfo.username = username;
       this.loginInfo.mail = mail;
+    },
+    setGameInfo({game_id, password}) {
+      this.gameInfo.game_id = game_id;
+      this.gameInfo.password = password
+    },
+    setGamePassword({password}) {
+      this.gameInfo.password = password
+    },
+    getGamePassword(){
+      return this.gameInfo.password;
     },
     isLoggedIn(){
       return this.loginInfo.loggedIn;
