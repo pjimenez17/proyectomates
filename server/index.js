@@ -10,7 +10,8 @@ const {
     updateUser,
     getUserById,
     deleteUser,
-    getUserByMailALL
+    getUserByMailALL,
+    insertGame
   } = require("./db");
 const bodyParser = require('body-parser');
 
@@ -168,5 +169,11 @@ app.post('/getuserbymail', (req,res)=>{
     .then((data)=>{
         res.send(data)
     });
+});
+
+app.post("/insertGame", async(req, res) =>{
+    const game = req.body;
+    const result = await insertGame(game.require_points, game.max_players);
+    res.send(result);
 });
 

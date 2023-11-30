@@ -11,7 +11,8 @@ module.exports = {
     updateUser,
     getUserById,
     deleteUser,
-    getUserByMailALL
+    getUserByMailALL,
+    insertGame
   };
 
 
@@ -179,6 +180,17 @@ function getIdUser(mail, password){
     });
 }
 
-function insertGame(){
-    
+function insertGame(required_points, max_players){
+    return new Promise((resolve, reject) => {
+        let con = conectDB();
+        var sql = "INSERT INTO Game  (required_points, max_players)VALUES (" + required_points + ", " + max_players + ")";
+        con.query(sql, function (err, result) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+        disconnectDB(con);
+    });
 }
