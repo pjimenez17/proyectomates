@@ -178,3 +178,7 @@ function getIdUser(mail, password){
         disconnectDB(con);
     });
 }
+
+function insertGame(){
+    
+}
