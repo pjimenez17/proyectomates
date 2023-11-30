@@ -121,7 +121,7 @@ function getUserByMailALL(mail) {
     })
 }
 
-function updateUser(user_id, name, mail, password, role, game_id, points, profile_pic) {
+function updateUser(user_id, name, mail, role, game_id, points, profile_pic) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
         var sql = "UPDATE users SET name='" + name + "', mail='" + mail + "', role='" + role + "', game_id= " + game_id + ", points=" + points + ", profile_pic='" + profile_pic + "' WHERE user_id=" + user_id + ";";

@@ -193,18 +193,18 @@ app.post("/insertGame", async(req, res) =>{
     const game = req.body;
     const result = await insertGame(game.required_points, game.max_players);
     const gameCreated = await selectLastGame();
-    res.send(gameCreated[0].game_id);
+    res.json(gameCreated[0].game_id);
 });
 
 //http://localhost:3777/@body(json)/21416542(exemple)
-app.post('/changeGameId/:id', async(req,body) =>{
+app.post('/changeGameId/:id', async(req, res) =>{
     const game_id = req.params.id;
     const data = req.body;
 
     const user = await getUserByMailALL(data.mail);
-    updateUser(user.user_id, user.name, user.mail, user.role, game_id, user.points, user.profile_pic)
+    updateUser(user[0].user_id, user[0].name, user[0].mail, user[0].role, game_id, user[0].points, user[0].profile_pic)
     .then(data =>{
-        res.send(data);
+        res.json(data);
     });
 })
 
