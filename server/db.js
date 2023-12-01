@@ -16,7 +16,8 @@ module.exports = {
     selectLastGame,
     getGameData,
     findIdByPasswordGame,
-    changeStateGame
+    changeStateGame,
+    selectUsersInGameByGameid
 };
 
 
@@ -235,7 +236,7 @@ function insertGame(required_points, max_players) {
 function getGameData(game_id){
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = "SELECT * FROM Game WHERE game_id = '"+ game_id+"';";
+        var sql = "SELECT * FROM Game WHERE game_id = "+ game_id+";";
         con.query(sql, function (err, result){
             if(err){
                 reject(err)
@@ -259,4 +260,18 @@ function changeStateGame(status, game_id){
         });
         disconnectDB(con);
     });
+}
+
+function selectUsersInGameByGameid(game_id){
+    return new Promise((resolve, reject) => {
+        let con = conectDB();
+        var sql = "SELECT mail, name FROM users WHERE game_id = "+ game_id+";";
+        con.query(sql, function (err, result){
+            if(err){
+                reject(err)
+            }else{
+                resolve(result)
+            }
+        })
+    })
 }

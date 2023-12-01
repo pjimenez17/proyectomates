@@ -31,7 +31,8 @@ const {
     selectLastGame,
     getGameData,
     findIdByPasswordGame,
-    changeStateGame
+    changeStateGame,
+    selectUsersInGameByGameid
   } = require("./db");
 
 
@@ -247,6 +248,11 @@ io.on('connection', async(socket) =>{
     socket.on('getUsers', async()=>{
         var users = await selectUsers();
         io.emit('users', users);
+    });
+
+    socket.on('getUserInGame', async(game_id)=>{
+        var users = await selectUsersInGameByGameid(game_id)
+        io.emit('usersInGame', users)
     });
 
     socket.on('disconnect', () => {
