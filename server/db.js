@@ -265,7 +265,7 @@ function changeStateGame(status, game_id){
 function selectUsersInGameByGameid(game_id){
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = "SELECT mail, name FROM users WHERE game_id = "+ game_id+";";
+        var sql = "SELECT mail, name, points FROM users WHERE game_id = "+ game_id+";";
         con.query(sql, function (err, result){
             if(err){
                 reject(err)
