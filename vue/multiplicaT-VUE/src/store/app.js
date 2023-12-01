@@ -6,41 +6,47 @@ export const useAppStore = defineStore('app', {
       username: '',
       mail: '',
     },
-    infoRanking:{
-      ranking:[]
+    infoRanking: {
+      ranking: []
     },
-    allQuestions:{
-      questions:[]
+    allQuestions: {
+      questions: []
     }
   }),
   actions: {
-    setLoginInfo({ loggedIn, username, mail}) {
+    setLoginInfo({ loggedIn, username, mail }) {
       this.loginInfo.loggedIn = loggedIn;
       this.loginInfo.username = username;
       this.loginInfo.mail = mail;
     },
-    isLoggedIn(){
+    isLoggedIn() {
       return this.loginInfo.loggedIn;
     },
-    getLoginInfo(){
+    getLoginInfo() {
       return this.loginInfo;
     },
-    getUsername(){
+    SetUsername(newusername) {
+      this.loginInfo.username = newusername;
+    },
+    getUsername() {
       return this.loginInfo.username;
     },
-    getMail(){
+    setMail(newmail) {
+      this.loginInfo.mail = newmail;
+    },
+    getMail() {
       return this.loginInfo.mail;
     },
-    setRanking(ranking){
+    setRanking(ranking) {
       this.infoRanking.ranking = ranking;
     },
-    getRanking(){
+    getRanking() {
       return this.infoRanking.ranking;
     },
-    setQuestions(questions){
+    setQuestions(questions) {
       this.allQuestions.questions = questions;
     },
-    getQuestions(){
+    getQuestions() {
       return this.allQuestions.questions;
     },
   },

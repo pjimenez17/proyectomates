@@ -53,3 +53,16 @@ export async function getuserbymail(mail){
     const respuesta = await response.json();
     return respuesta;
 };
+
+export async function updateUser(name,mail,profile_pic,oldmail){
+  const response = await fetch('http://localhost:3777/updateUserVue/',{
+      method: 'POST',
+      headers:{
+          'Content-Type': 'application/json',
+      },
+      body:JSON.stringify({name,mail,profile_pic,oldmail}),
+  });
+  const respuesta = await response.json();
+  return respuesta;
+};
+
