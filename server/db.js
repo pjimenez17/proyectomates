@@ -15,7 +15,8 @@ module.exports = {
     insertGame,
     selectLastGame,
     getGameData,
-    findIdByPasswordGame
+    findIdByPasswordGame,
+    changeStateGame
 };
 
 
@@ -243,4 +244,19 @@ function getGameData(game_id){
             }
         })
     })
+}
+
+function changeStateGame(status, game_id){
+    return new Promise((resolve, reject) => {
+        let con = conectDB();
+        var sql = "UPDATE Game SET status='"+status+"' WHERE game_id= "+game_id+";";
+        con.query(sql, function (err, result) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+        disconnectDB(con);
+    });
 }

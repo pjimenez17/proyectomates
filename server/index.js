@@ -30,7 +30,8 @@ const {
     insertGame,
     selectLastGame,
     getGameData,
-    findIdByPasswordGame
+    findIdByPasswordGame,
+    changeStateGame
   } = require("./db");
 
 
@@ -224,6 +225,11 @@ app.post('/joinGame/:password', (req,res) =>{
 
 });
 
+app.post('/changeStatusGame', async(req, res) =>{
+    const data = req.body;
+    const result = await changeStateGame(data.status, data.game_id);
+    res.send(result);
+})
 app.post("/getGameData", async(req, res)=>{
     console.log(req.body);
     const id = req.body.game_id;
