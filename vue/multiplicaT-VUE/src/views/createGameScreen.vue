@@ -13,7 +13,7 @@
                                     <v-slider v-model="minMaxPoints1v1" :max="700" :min="100" step="1"
                                         label="Puntuación"></v-slider>
                                     <v-btn color="blue" size="large" type="submit" variant="elevated"
-                                        @click="createGame">Crear
+                                        @click="createGame1v1">Crear
                                         Juego</v-btn>
                                 </v-col>
                             </v-row>
@@ -23,23 +23,24 @@
                                     <v-col cols="12" md="8">
                                         <v-text-field v-model="minMaxPointsPvP" label="Puntos para ganar" outlined
                                             type="number" @input="checkMaxPointsPvP"></v-text-field>
-                                        <v-text-field v-model="minMaxUsersPvP" label="Usuarios" outlined
-                                            type="number" @input="checkMaxUsers"></v-text-field>
+                                        <v-text-field v-model="minMaxUsersPvP" label="Usuarios" outlined type="number"
+                                            @input="checkMaxUsers"></v-text-field>
                                         <v-slider v-model="minMaxPointsPvP" :max="700" :min="100" step="1"
                                             label="Puntuación"></v-slider>
                                         <v-slider v-model="minMaxUsersPvP" :max="50" :min="3" step="1"
                                             label="Usuarios"></v-slider>
                                         <v-btn color="blue" size="large" type="submit" variant="elevated"
-                                            @click="createGame">Crear Juego</v-btn>
+                                            @click="createGamePvP">Crear Juego</v-btn>
                                     </v-col>
                                 </v-col>
                             </v-row>
 
                             <v-row justify="center" v-if="selectedOption === 'joinGame'">
                                 <v-col cols="12" md="8">
-                                    <v-text-field v-model="gameId" label="Contraseña de la Partida" outlined
+                                    <v-text-field v-model="password" label="Contraseña de la Partida" outlined
                                         type="number"></v-text-field>
-                                    <v-btn color="blue" size="large" type="submit" variant="elevated">Unirse</v-btn>
+                                    <v-btn color="blue" size="large" type="submit" variant="elevated"
+                                        @click="joinGame">Unirse</v-btn>
 
                                 </v-col>
                             </v-row>
@@ -73,6 +74,9 @@
 </template>
   
 <script>
+import { createGame, updateGameID, getGameData, joinGame } from "@/services/communicationsmanager.js"
+import { useAppStore } from '@/store/app';
+
 export default {
     data() {
         return {
@@ -80,32 +84,115 @@ export default {
             gameId: '',
             minMaxPoints1v1: 100,
             minMaxPointsPvP: 100,
-            minMaxUsersPvP: 3
+            minMaxUsersPvP: 3,
+            password: '',
+            store: null,
+
         };
     },
+
     methods: {
         selectOption(option) {
             this.selectedOption = option;
         },
-        createGame() {
-            this.$router.push("/play")
+        async createGame1v1() {
+            const store = useAppStore();
+
+
+            try {
+                console.log(this.minMaxPoints1v1)
+                const result = await createGame(this.minMaxPoints1v1, 2);
+                await updateGameID(result);
+                console.log("idfwa :" + result);
+                const gameData = await getGameData(result);
+                console.log(gameData[0].game_password);
+                if (gameData && gameData[0].game_password) {
+
+                    store.setGameInfo({
+                        game_id: result,
+                        password: gameData[0].game_password
+                    })
+                    console.log(result);
+                    this.$router.push("/play");
+                } else {
+                    console.error("No se pudo obtener la contraseña del juego.");
+                    // Puedes manejar esta situación de alguna manera, por ejemplo, mostrando un mensaje al usuario.
+                }
+
+
+            } catch (error) {
+                console.log(error);
+            }
         },
+        async createGamePvP() {
+            const store = useAppStore();
+
+            try {
+                const result = await createGame(this.minMaxPointsPvP, this.minMaxUsersPvP);
+                await updateGameID(result);
+                console.log("idfwa :" + result);
+                const gameData = await getGameData(result);
+                console.log(gameData[0].game_password);
+                if (gameData && gameData[0].game_password) {
+
+                    store.setGameInfo({
+                        game_id: result,
+                        password: gameData[0].game_password
+                    })
+                    console.log(result);
+                    this.$router.push("/play");
+                } else {
+                    console.error("No se pudo obtener la contraseña del juego.");
+                    // Puedes manejar esta situación de alguna manera, por ejemplo, mostrando un mensaje al usuario.
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+       async joinGame() {
+            if (this.password.trim() === "") {
+                window.alert("La contraseña de la partida no puede estar vacía.");
+                return;
+            }try {
+            const result = await joinGame(this.password);
+
+            // Haz algo con el resultado si es necesario
+            console.log(result);
+
+            // Continúa con la lógica de redirección u otras acciones después de unirse al juego
+            this.$router.push("/play");
+        } catch (error) {
+            console.error("Error al unirse al juego:", error);
+            // Puedes manejar el error mostrando un mensaje al usuario o realizando otras acciones necesarias
+        }
+
+            // Continúa con la lógica de unirse al juego
+            this.$router.push("/play");
+        },
+
         checkMaxPoints1v1() {
             if (this.minMaxPoints1v1 > 700) {
                 this.minMaxPoints1v1 = 700;
+            } else if (this.minMaxPoints1v1 < 100) {
+                this.minMaxPoints1v1 = 100
             }
         },
         checkMaxPointsPvP() {
             if (this.minMaxPointsPvP > 700) {
                 this.minMaxPointsPvP = 700;
+            } else if (this.minMaxPointsPvP < 100) {
+                this.minMaxPointsPvP = 100
             }
         },
         checkMaxUsers() {
             if (this.minMaxUsersPvP > 50) {
                 this.minMaxUsersPvP = 50;
+            } else if (this.minMaxUsersPvP < 3) {
+                this.minMaxUsersPvP = 3
             }
-    },
-}}
+        },
+    }
+}
 </script>
 
 <style scoped>
