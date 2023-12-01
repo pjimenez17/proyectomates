@@ -181,10 +181,10 @@ function getIdUser(mail, password) {
     });
 }
 
-function UpdateUserVue(name, mail, oldmail) {
+function UpdateUserVue(name, mail, img, oldmail) {
     return new Promise((resolve, rejects) => {
         let con = conectDB();
-        var sql = "UPDATE users SET name='"+name+"',mail='"+mail+"' WHERE mail='" + oldmail + "';";
+        var sql = "UPDATE users SET name='"+name+"',mail='"+mail+"',profile_pic='"+img+"' WHERE mail='" + oldmail + "';";
 
         con.query(sql,function(err,result){
             if(err){

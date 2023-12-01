@@ -177,12 +177,13 @@ app.post('/getuserbymail', (req, res) => {
 
 app.post('/updateUserVue', async (req, res) => {
     const user = req.body;
-    const result = await UpdateUserVue(user.name,user.mail,user.oldmail);
+    console.log(user);
+    const result = await UpdateUserVue(user.name,user.mail,user.profile_pic,user.oldmail);
 
     if(result){
         res.send({message: "User modified"})
     }else{
-        res.send({message: "failed update"});
+        res.send({message: "Failed update"});
     }
 });
 
