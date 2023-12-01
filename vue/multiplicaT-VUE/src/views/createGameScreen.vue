@@ -37,7 +37,7 @@
 
                             <v-row justify="center" v-if="selectedOption === 'joinGame'">
                                 <v-col cols="12" md="8">
-                                    <v-text-field v-model="gameId" label="Contraseña de la Partida" outlined
+                                    <v-text-field v-model="password" label="Contraseña de la Partida" outlined
                                         type="number"></v-text-field>
                                     <v-btn color="blue" size="large" type="submit" variant="elevated"
                                         @click="joinGame">Unirse</v-btn>
@@ -74,7 +74,7 @@
 </template>
   
 <script>
-import { createGame, updateGameID, getGameData } from "../services/communicationsmanager.js"
+import { createGame, updateGameID, getGameData, joinGame } from "@/services/communicationsmanager.js"
 import { useAppStore } from '@/store/app';
 
 export default {
@@ -149,11 +149,22 @@ export default {
                 console.log(error);
             }
         },
-        joinGame() {
-            if (this.gameId.trim() === "") {
+       async joinGame() {
+            if (this.password.trim() === "") {
                 window.alert("La contraseña de la partida no puede estar vacía.");
                 return;
-            }
+            }try {
+            const result = await joinGame(this.password);
+
+            // Haz algo con el resultado si es necesario
+            console.log(result);
+
+            // Continúa con la lógica de redirección u otras acciones después de unirse al juego
+            this.$router.push("/play");
+        } catch (error) {
+            console.error("Error al unirse al juego:", error);
+            // Puedes manejar el error mostrando un mensaje al usuario o realizando otras acciones necesarias
+        }
 
             // Continúa con la lógica de unirse al juego
             this.$router.push("/play");

@@ -108,14 +108,14 @@ export async function updateGameID(game_id) {
   }
 }
 
-export async function getGameData( id ) {
+export async function getGameData(id) {
   try {
     const response = await fetch("http://localhost:3777/getGameData", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ game_id: id })
+      body: JSON.stringify({ game_id: id }),
     });
     const respuesta = await response.json();
     return respuesta;
@@ -124,9 +124,52 @@ export async function getGameData( id ) {
     throw error;
   }
 }
-    
-  
-    
-  
-  
 
+export async function joinGame(password) {
+  try {
+    const store = useAppStore();
+    const userEmail = store.getMail();
+
+    const response = await fetch(`http://localhost:3777/joinGame/${password}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        mail: userEmail,
+      }),
+    });
+
+    const data = await response.json();
+    // Maneja la respuesta del servidor si es necesario
+    console.log(data);
+
+    // Si deseas hacer algo con la respuesta en tu componente Vue, puedes retornarla
+    return data;
+  } catch (error) {
+    // Maneja los errores si es necesario
+    console.error("Error al realizar la solicitud:", error);
+    throw error; // Puedes lanzar el error nuevamente si es necesario
+  }
+}
+export async function updateGameStatus(status, game_id) {
+  try {
+    const response = await fetch("http://localhost:3777/changeStatusGame", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status,
+        game_id,
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Error al cambiar el estado del juego:", error);
+    throw error;
+  }
+}

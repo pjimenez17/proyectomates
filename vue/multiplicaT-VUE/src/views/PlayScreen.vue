@@ -22,7 +22,8 @@
   
   <script>
 import { useAppStore } from '@/store/app';
-  
+import { updateGameStatus } from "@/services/communicationsmanager.js"
+
   export default {
     data() {
       return {
@@ -39,9 +40,23 @@ import { useAppStore } from '@/store/app';
         console.log(password);
     },
     methods: {
-      startGame() {
+      async startGame() {
+      try {
+        // Obtén el game_id y realiza la solicitud para cambiar el estado a "iniciado"
+        const store = useAppStore();
+        const game_id = store.getGameId();
+        const result = await updateGameStatus('in_game', game_id);
+
+        // Haz algo con el resultado si es necesario
+        console.log(result);
+
+        // Continúa con la lógica de redirección u otras acciones después de iniciar la partida
         console.log("Partida iniciada");
-      },
+      } catch (error) {
+        console.error("Error al iniciar la partida:", error);
+        // Puedes manejar el error mostrando un mensaje al usuario o realizando otras acciones necesarias
+      }
+    },
     },
   };
   </script>

@@ -9,6 +9,8 @@ export const useAppStore = defineStore('app', {
     gameInfo: {
       game_id: '',
       password: '',
+      status: '',
+      points: 0,
     },
     infoRanking:{
       ranking:[]
@@ -32,6 +34,9 @@ export const useAppStore = defineStore('app', {
     },
     getGamePassword(){
       return this.gameInfo.password;
+    },
+    getGameId(){
+      return this.gameInfo.game_id;
     },
     isLoggedIn(){
       return this.loginInfo.loggedIn;
