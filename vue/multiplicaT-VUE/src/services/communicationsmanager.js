@@ -186,3 +186,14 @@ export async function updateUser(name,mail,profile_pic,oldmail){
   return respuesta;
 };
 
+export async function getQuestions() {
+  try {
+    const response = await fetch('http://localhost:3777/getQuestions');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching questions:', error);
+    throw error;
+  }
+}
+
