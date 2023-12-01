@@ -126,7 +126,7 @@ function getUserByMailALL(mail) {
 function findIdByPasswordGame(password){
     return new Promise((resolve, reject) => {
         let con = conectDB();
-        var sql = "SELECT game_id FROM Game WHERE password=" + password + ";";
+        var sql = "SELECT game_id FROM Game WHERE game_password=" + password + ";";
         con.query(sql, function (err, results) {
             if (err) {
                 reject(err);
