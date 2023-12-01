@@ -29,7 +29,8 @@ const {
     getUserByMailALL,
     insertGame,
     selectLastGame,
-    getGameData
+    getGameData,
+    findIdByPasswordGame
   } = require("./db");
 
 
@@ -50,7 +51,7 @@ const client = new MongoClient(url);
 
 const dbName = "MultiplicaT";
 
-Server.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server started on ${port}`);
 });
 
@@ -208,6 +209,18 @@ app.post('/changeGameId/:id', async(req, res) =>{
         res.json(data);
     });
 })
+
+app.post('/joinGame/:password', (req,res) =>{
+    const mailUser = req.body;
+    const password = req.params.password;
+
+    findIdByPasswordGame(password)
+    .then(async(data) =>{
+        const user = await getUserByMailALL(data.mail);
+        updateUser(user[0].user_id, user[0].name, user[0].mail, user[0].role, data, user[0].points, user[0].profile_pic)
+    });
+
+});
 
 app.post("/getGameData", async(req, res)=>{
     console.log(req.body);

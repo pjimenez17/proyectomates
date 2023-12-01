@@ -14,7 +14,8 @@ module.exports = {
     getUserByMailALL,
     insertGame,
     selectLastGame,
-    getGameData
+    getGameData,
+    findIdByPasswordGame
 };
 
 
@@ -112,6 +113,20 @@ function getUserByMailALL(mail) {
     return new Promise((resolve, reject) => {
         let con = conectDB();
         var sql = "SELECT user_id, name, mail, role, points, profile_pic, game_id FROM users WHERE mail='" + mail + "';";
+        con.query(sql, function (err, results) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        })
+    })
+}
+
+function findIdByPasswordGame(password){
+    return new Promise((resolve, reject) => {
+        let con = conectDB();
+        var sql = "SELECT game_id FROM Game WHERE password=" + password + ";";
         con.query(sql, function (err, results) {
             if (err) {
                 reject(err);
