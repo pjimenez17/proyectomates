@@ -12,7 +12,8 @@ module.exports = {
     updateUser,
     getUserById,
     deleteUser,
-    getUserByMailALL
+    getUserByMailALL,
+    UpdateUserVue
 };
 
 
@@ -180,17 +181,17 @@ function getIdUser(mail, password) {
     });
 }
 
-function UpdateUserVue(name, mail) {
+function UpdateUserVue(name, mail, oldmail) {
     return new Promise((resolve, rejects) => {
         let con = conectDB();
-        var sql = "UPDATE users SET name='"+name+"',mail='"+mail+"' WHERE mail='" + mail + "';";
+        var sql = "UPDATE users SET name='"+name+"',mail='"+mail+"' WHERE mail='" + oldmail + "';";
 
         con.query(sql,function(err,result){
             if(err){
                 rejects(err)
             }else{
                 con
-                resolve()
+                resolve(true)
             }
         });
     })

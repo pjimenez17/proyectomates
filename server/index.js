@@ -10,7 +10,8 @@ const {
     updateUser,
     getUserById,
     deleteUser,
-    getUserByMailALL
+    getUserByMailALL,
+    UpdateUserVue
 } = require("./db");
 const bodyParser = require('body-parser');
 
@@ -35,21 +36,6 @@ app.listen(port, () => {
     console.log(`Server started on ${port}`);
 });
 
-app.post('/authorizationLogin', async (req, res) => {
-    const user = req.body;
-    console.log(user);
-    if (await checkIfUserExists(user.mail, user.password)) {
-        req.session.loogedIn = true;
-        req.session.userId = await getIdUser(user.mail, user.password);
-        const id = await getIdUser(user.mail, user.password);
-        console.log(id);
-        const infoUser = await getUserById(id[0].user_id);
-        console.log(infoUser);
-        res.send({ authorization: true, name: infoUser[0].name })
-    } else {
-        res.send({ authorization: false })
-    }
-});
 
 // ---Questions into MongoDb---
 
@@ -124,6 +110,25 @@ app.post('/addQuestion', async (req, res) => {
     }
 });
 
+// ---USERS into MYSQL---
+
+
+app.post('/authorizationLogin', async (req, res) => {
+    const user = req.body;
+    console.log(user);
+    if (await checkIfUserExists(user.mail, user.password)) {
+        req.session.loogedIn = true;
+        req.session.userId = await getIdUser(user.mail, user.password);
+        const id = await getIdUser(user.mail, user.password);
+        console.log(id);
+        const infoUser = await getUserById(id[0].user_id);
+        console.log(infoUser);
+        res.send({ authorization: true, name: infoUser[0].name })
+    } else {
+        res.send({ authorization: false })
+    }
+});
+
 //The function goes
 app.get('/users', (req, res) => {
     selectUsers()
@@ -159,7 +164,7 @@ app.delete('/deleteUser', async (req, res) => {
     }
 });
 
-//Requests
+//REQUESTS
 app.post('/getuserbymail', (req, res) => {
     const user = req.body;
     console.log("GETUSERBYMAIL::");
@@ -170,9 +175,14 @@ app.post('/getuserbymail', (req, res) => {
         });
 });
 
-app.post('/updateUser', (req, res) => {
+app.post('/updateUserVue', async (req, res) => {
     const user = req.body;
+    const result = await UpdateUserVue(user.name,user.mail,user.oldmail);
 
-    
+    if(result){
+        res.send({message: "User modified"})
+    }else{
+        res.send({message: "failed update"});
+    }
 });
 
