@@ -216,7 +216,7 @@ app.post('/joinGame/:password', (req,res) =>{
 
     findIdByPasswordGame(password)
     .then(async(data) =>{
-        const user = await getUserByMailALL(data.mail);
+        const user = await getUserByMailALL(mailUser.mail);
         updateUser(user[0].user_id, user[0].name, user[0].mail, user[0].role, data, user[0].points, user[0].profile_pic)
     });
 
