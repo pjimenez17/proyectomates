@@ -26,6 +26,10 @@ const routes = [
     path: '/create-game',  
     component: () => import('@/views/createGameScreen.vue'),
     //meta: { requiresAdmin: true } // Puedes agregar metadatos para verificar si se requieren permisos de administrador
+  },
+  {
+    path: '/questions',
+    component: () => import('@/views/QuestionsScreen.vue')
   }
 ]
 
