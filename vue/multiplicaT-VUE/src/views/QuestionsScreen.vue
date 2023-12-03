@@ -21,12 +21,19 @@
                             <v-container v-for="(pregunta, index) in this.questions">
                                 <div v-if="currentQuestionIndex == index">
                                     <p class="enunciado">{{ pregunta.enunciado }}</p>
-                                    <v-btn v-for="option in pregunta.opciones" :key="option"
-                                        @click="selectOption(pregunta, option)" class="btnAnswer">
-                                        {{ option }}
-                                    </v-btn>
-                                    <p>Dificultad: {{ pregunta.dificultad }}</p>
-                                    <p>Puntuación: {{ pregunta.puntuacion }}</p>
+                                    <v-row>
+                                        <v-col md="5" v-for="(option, index) in pregunta.opciones" :key="option">
+                                            <v-btn @click="selectOption(pregunta, option)"
+                                                :style="{ fontSize: '18px', minWidth: '200px', minHeight: '80px' }">
+                                                {{ option }}
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                    <div class="info-question">
+                                        <p>Dificultad: {{ pregunta.dificultad }}</p>
+                                        <p>Puntuación: {{ pregunta.puntuacion }}</p>
+                                    </div>
+
                                 </div>
                             </v-container>
                         </v-col>
@@ -148,8 +155,9 @@ export default {
     padding: 20px;
 }
 
-.btnAnswer{
-    
+.info-question{
+    margin-top: 50px;
+    font-weight: bolder;
 }
 </style>
     
