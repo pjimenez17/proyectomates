@@ -120,22 +120,29 @@ export default {
     methods: {
 
         saveProfile() {
-            updateUser(this.EditName, this.EditMail, this.EditImag, this.mail).then((response) => {
-                this.notification = response.message;
 
-                console.log("Response: ", response);
-                console.log(this.EditImag);
+            if (this.EditName == "" && this.EditMail == "") {
+                alert("Els camps nom i correu electronic no poden estar buits");
+            } else {
+                updateUser(this.EditName, this.EditMail, this.EditImag, this.mail).then((response) => {
 
-                const store = useAppStore();
-                store.setMail(this.EditMail);
-                store.SetUsername(this.EditName)
-                this.EditMode = false;
+                    this.notification = response.message;
 
-                // Establece el color del Snackbar en función de si hay un error en la respuesta
-                this.notificationSnackbar = true;
-                this.notificationSnackbarColor = response.message.toLowerCase().includes("Failed") ? "error" : "success";
+                    console.log("Response: ", response);
+                    console.log(this.EditImag);
 
-            });
+                    const store = useAppStore();
+                    store.setMail(this.EditMail);
+                    store.SetUsername(this.EditName)
+                    this.EditMode = false;
+
+                    // Establece el color del Snackbar en función de si hay un error en la respuesta
+                    this.notificationSnackbar = true;
+                    this.notificationSnackbarColor = response.message.toLowerCase().includes("Failed") ? "error" : "success";
+
+
+                });
+            }
         },
         SeePasword() {
             // Cambia el estado de showPassword al hacer clic en el botón
@@ -180,9 +187,6 @@ export default {
         const usermail = store.getMail();
         this.mail = usermail;
         console.log("MAIL PERFIL: ", this.mail);
-    },
-
-    mounted() {
         getuserbymail(this.mail).then((response) => {
             this.user = response;
             console.log(this.user);
@@ -192,6 +196,11 @@ export default {
 
             console.log("IMAGEN ", this.EditImag);
         });
+
+    },
+
+    mounted() {
+        console.log("MONTADO");
     }
 };
 </script>
