@@ -9,13 +9,20 @@
 
                     <br />
                     <v-card-text v-for="users in user">
-                        <v-row v-if="!EditMode">
-                            <v-col>
-                                <img :src="EditImag ? EditImag : defaultAvatar"/>
 
+                        <v-row v-if="!EditMode">
+                            <v-col cols="2">
+                                <img :src="EditImag ? EditImag : defaultAvatar" />
+
+                            </v-col>
+
+                            <v-col cols="10">
                                 <p>NAME</p>
                                 <v-text-field v-model="this.EditName" :readonly="!EditMode" v-if="users.name"
                                     prepend-inner-icon="mdi-account" class="text-field"></v-text-field>
+                            </v-col>
+
+                            <v-col>
 
                                 <p>MAIL</p>
                                 <v-text-field v-model="this.EditMail" :readonly="!EditMode" v-if="users.mail"
@@ -34,12 +41,27 @@
                             </v-col>
                         </v-row>
                         <v-row v-else>
-                            <v-col>
+                            <v-col cols="2">
                                 <img :src="EditImag ? EditImag : defaultAvatar" />
 
-                                <p>IMAGEN</p>
-                                <v-text-field  v-model="EditImag" class="text-field"></v-text-field>
+                            </v-col>
 
+                            <v-col cols="10">
+                                <p>IMAGEN</p>
+                                <v-text-field v-model="EditImag" class="text-field">
+                                    <template v-slot:append>
+
+                                        <v-btn v-if="EditMode" @click="importImage()" icon>
+                                            <v-icon>mdi-upload</v-icon>
+                                        </v-btn>
+                                    </template>
+                                </v-text-field>
+
+                                <input ref="fileInput" type="file" style="display: none" @change="handleFileChange()">
+
+                            </v-col>
+
+                            <v-col>
                                 <p>NAME</p>
                                 <v-text-field v-model="this.EditName" prepend-inner-icon="mdi-account"
                                     class="text-field"></v-text-field>
@@ -56,7 +78,7 @@
 
                     </v-card-text>
                     <v-card-actions v-if="EditMode">
-                        <v-btn color="primary" @click="saveProfile() && changeImage()">Guardar</v-btn>
+                        <v-btn color="primary" @click="saveProfile()">Guardar</v-btn>
                         <v-btn color="red" @click="cancelEdit()">Cancelar</v-btn>
                     </v-card-actions>
                 </v-card>
@@ -123,31 +145,33 @@ export default {
             // Restaura los campos de texto a sus valores originales
             this.EditName = this.user[0].name;
             this.EditMail = this.user[0].mail;
+            this.EditImag = this.user[0].profile_pic;
             this.EditMode = false; // Sale del modo de edición sin guardar
         },
-        redirectToOfficialPage() {
-            // Utiliza Vue Router para redirigir a la página oficial
-            this.$router.push({ path: "/welcome" }); // Ajusta la ruta según tu configuración
-        },
-        changeImage() {
-            // Muestra un cuadro de diálogo para que el usuario ingrese la nueva URL de la imagen
-            this.$dialog.prompt({
-                title: "Cambiar imagen",
-                text: "Ingresa la nueva URL de la imagen:",
-                modelValue: this.editImage,
-                inputAttrs: {
-                    placeholder: "URL de la imagen",
-                },
-            })
-                .then((newImageUrl) => {
-                    // Asigna la nueva URL de la imagen al modelo
-                    this.editImage = newImageUrl;
-                })
-                .catch(() => {
-                    // El usuario canceló el cambio de imagen
-                });
+
+        importImage() {
+            const fileInput = this.$el.querySelector('input[type="file"]');
+            if (fileInput) {
+                fileInput.click();
+            }
         },
 
+        handleFileChange(event) {
+            const fileInput = this.$el.querySelector('input[type="file"]');
+            const file = (event.target.files && event.target.files[0]) || null;
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    this.EditImag = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+                // Limpiamos el valor del input para que pueda seleccionar la misma imagen nuevamente
+                fileInput.value = null;
+            }
+        },
     },
 
     created() {
@@ -166,7 +190,7 @@ export default {
             this.EditName = this.user[0].name;
             this.EditImag = this.user[0].profile_pic
 
-            console.log("IMAGEN ",this.EditImag);
+            console.log("IMAGEN ", this.EditImag);
         });
     }
 };
